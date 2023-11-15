@@ -3,6 +3,8 @@ package com.ninoleliege.mmi.myapplication
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +40,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ninoleliege.mmi.myapplication.ui.theme.MyApplicationTheme
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 
 sealed class Destination(val destination: String, val label: String, val icon: ImageVector) {
@@ -51,6 +57,11 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        val viewmodel: MainViewModel by viewModels()
+
+
         setContent {
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
@@ -84,10 +95,8 @@ class MainActivity : ComponentActivity() {
                     composable(Destination.Films.destination) { Films(){navController.navigate("profil")} }
                 }
             }
-           // NavHost(navController = navController, startDestination = "screen") {
-             //   composable("screen") { Screen (windowSizeClass){navController.navigate("screen2")} }
-               // composable("screen2") { Screen2 {navController.navigate("screen")} }
-           // }
+
+
 
 
 
@@ -147,6 +156,7 @@ fun Profil(windowClass: WindowSizeClass, onClick:()->Unit) {
 fun Films(onClick:()->Unit) {
     Text("Films")
     ButNavigate(onClick,"Profil")
+    ListeFilms()
 }
 
 @Composable
@@ -157,3 +167,5 @@ fun ButNavigate(onClick:()->Unit, texte:String) {
         Text(texte)
     }
 }
+
+

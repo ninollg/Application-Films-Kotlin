@@ -32,7 +32,7 @@ fun Nom(){
     Text(
         text = "Nino Leliege",
         fontSize = 40.sp,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Bold
     )
 }
 
@@ -41,7 +41,7 @@ fun ImageMail() {
     Image(
         painterResource(id = R.drawable._244710),
         contentDescription = "logo mail",
-        Modifier.width(30.dp)
+        Modifier.width(20.dp)
     )
 }
 
@@ -64,7 +64,7 @@ fun ImageLinkedin() {
     Image(
         painterResource(id = R.drawable.logolinkedin),
         contentDescription = "logo linkedin",
-        Modifier.width(30.dp)
+        Modifier.width(20.dp)
     )
 }
 
