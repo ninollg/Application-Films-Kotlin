@@ -51,7 +51,7 @@ sealed class Destination(val destination: String, val label: String, val icon: I
     object Films : Destination("films", "liste des films", Icons.Filled.Edit)
     object Series : Destination("series", "liste des series", Icons.Filled.Edit)
     object Acteurs : Destination("acteurs", "liste des acteurs", Icons.Filled.Person)
-    object DetailsFilm : Destination("detailsfilm", "Details d'un film", Icons.Filled.Person)
+
 }
 
 class MainActivity : ComponentActivity() {
@@ -68,7 +68,8 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background) {
+                    color = MaterialTheme.colorScheme.background
+                ) {
 
                 }
             }
@@ -81,42 +82,67 @@ class MainActivity : ComponentActivity() {
 
             val destinations = listOf(Destination.Profil, Destination.Films, Destination.Series)
             Scaffold(
-                bottomBar = {  if (currentDestination?.hierarchy?.any { it.route == Destination.Profil.destination } == false) {BottomNavigation {
-                    destinations.forEach { screen ->
-                        BottomNavigationItem(
-                            icon = { Icon(screen.icon, contentDescription = null) },
-                            label = { Text(screen.label) },
-                            selected = currentDestination?.hierarchy?.any { it.route == screen.destination } == true,
-                            onClick = { navController.navigate(screen.destination) })
-                    }}}
-                }) { innerPadding ->
-                NavHost(navController, startDestination = Destination.Profil.destination,
-                    Modifier.padding(innerPadding)) {
-                    composable(Destination.Profil.destination) { Profil(windowSizeClass){navController.navigate("films")} }
-                    composable(Destination.Films.destination) { Films(){navController.navigate("profil")} }
-                    composable(Destination.Series.destination) { Series(){navController.navigate("series")} }
-                    composable(Destination.DetailsFilm.destination) { DetailsFilm(){navController.navigate("DetailsFilm/{id}")} }
-                    composable("destination/{id}") { backStackEntry ->
-                        DetailsFilm(backStackEntry.arguments?.getString("id"))
+                bottomBar = {
+                    if (currentDestination?.hierarchy?.any { it.route == Destination.Profil.destination } == false) {
+                        BottomNavigation {
+                            destinations.forEach { screen ->
+                                BottomNavigationItem(
+                                    icon = { Icon(screen.icon, contentDescription = null) },
+                                    label = { Text(screen.label) },
+                                    selected = currentDestination?.hierarchy?.any { it.route == screen.destination } == true,
+                                    onClick = { navController.navigate(screen.destination) })
+                            }
+                        }
                     }
+                }) { innerPadding ->
+                NavHost(
+                    navController, startDestination = Destination.Profil.destination,
+                    Modifier.padding(innerPadding)
+                ) {
+                    composable(Destination.Profil.destination) {
+                        Profil(windowSizeClass) {
+                            navController.navigate(
+                                "films"
+                            )
+                        }
+                    }
+                    composable(Destination.Films.destination) {
+                        Films(viewmodel = viewmodel) { id ->
+                            navController.navigate(
+                                "DetailsFilm/${id}"
+                            )
+                        }
+                    }
+                    composable(Destination.Series.destination) {
+                        Series(viewmodel = viewmodel) {
+                            navController.navigate(
+                                "series"
+                            )
+                        }
+                    }
+                    composable("DetailsFilm/{id}") { backStackEntry ->
+                        val id = backStackEntry.arguments?.getString("id") ?: ""
+                        DetailsFilm(viewmodel = viewmodel, id = id)
+                    }                    }
                 }
             }
-
-
-
-
-
         }
+
+
     }
-}
+
 
 
 @Composable
-fun Profil(windowClass: WindowSizeClass, onClick:()->Unit) {
+fun Profil(windowClass: WindowSizeClass, onClick: () -> Unit) {
 
     when (windowClass.widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
-            Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 MonImage()
                 Spacer(Modifier.height(50.dp))
                 Nom()
@@ -131,14 +157,20 @@ fun Profil(windowClass: WindowSizeClass, onClick:()->Unit) {
                     Linkedin()
                 }
                 Spacer(Modifier.height(40.dp))
-                ButNavigate(onClick,"Démarrer")        }
+                ButNavigate(onClick, "Démarrer")
+            }
 
         }
-        else ->{
+
+        else -> {
             Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                 MonImage()
                 Spacer(Modifier.height(50.dp))
-                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
                     Nom()
                     Infos()
                     Spacer(Modifier.height(40.dp))
@@ -151,44 +183,57 @@ fun Profil(windowClass: WindowSizeClass, onClick:()->Unit) {
                         Linkedin()
                     }
                     Spacer(Modifier.height(40.dp))
-                    ButNavigate(onClick,"Démarrer")         }
+                    ButNavigate(onClick, "Démarrer")
+                }
             }
         }
-        }
+    }
 
 }
 
 @Composable
-fun Films(onClick:()->Unit) {
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+fun Films(viewmodel: MainViewModel, onClick: (id: String) -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text("Films")
-        ListeFilms(viewModel = MainViewModel())
+        ListeFilms(viewModel = viewmodel, onClick)
     }
 }
 
 @Composable
-fun Series(onClick:()->Unit) {
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+fun Series(viewmodel: MainViewModel, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text("Series")
-        ListeSeries(viewModel = MainViewModel())
+        ListeSeries(viewModel = viewmodel)
     }
 }
 
 @Composable
-fun DetailsFilm(onClick:()->Unit) {
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+fun DetailsFilm(viewmodel: MainViewModel, id: String) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text("Detail d'un film")
-        ListeDetailsFilm(id)
+
+        ListeDetailsFilm(id=id, viewModel = viewmodel )
     }
 }
 
 
-
 @Composable
-fun ButNavigate(onClick:()->Unit, texte:String) {
+fun ButNavigate(onClick: () -> Unit, texte: String) {
     Button(
         onClick = onClick
-        ) {
+    ) {
         Text(texte)
     }
 }

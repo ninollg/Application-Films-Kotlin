@@ -36,11 +36,11 @@ class MainViewModel : ViewModel() {
     }
 
 
-    val detailsfilms = MutableStateFlow<List<TmdbDetailsFilm>>(listOf())
+    val detailsfilm = MutableStateFlow<TmdbDetailsFilm?>(null)
 
-    fun getDetailsFilm() {
+    fun getDetailsFilm(id:String) {
         viewModelScope.launch {
-            detailsfilms.value = api.detailsfilm("432dbeb947fe645d6b008204074295c6").results
+            detailsfilm.value = api.detailsfilm(api_key = "432dbeb947fe645d6b008204074295c6", id=id)
         }
     }
 }

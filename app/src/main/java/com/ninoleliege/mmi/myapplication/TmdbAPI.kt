@@ -1,6 +1,7 @@
 package com.ninoleliege.mmi.myapplication
 
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Api {
@@ -16,7 +17,8 @@ interface Api {
 
 
     // detail d'un film
-    @GET("movie/${id}?append_to_response=credits&")
-    suspend fun detailsfilm(@Query("api_key") api_key: String): TmdbDetailsFilm
+    @GET("movie/{id}?append_to_response=credits")
+    suspend fun detailsfilm(@Path("id") id: String, @Query("api_key") api_key: String): TmdbDetailsFilm
+
 
 }

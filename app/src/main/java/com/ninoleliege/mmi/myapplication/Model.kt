@@ -46,6 +46,11 @@ data class TmdbTv(
 
 
 //details d'un film
+data class TmdbDetailsFilmResult(
+    val page: Int = 0,
+    val results: List<TmdbDetailsFilm> = listOf()
+)
+
 data class TmdbDetailsFilm(
     val adult: Boolean,
     val backdrop_path: String,
@@ -73,7 +78,9 @@ data class TmdbDetailsFilm(
     val video: Boolean,
     val vote_average: Double,
     val vote_count: Int
-)
+) {
+
+}
 
 data class Credits(
     val cast: List<Cast>,
