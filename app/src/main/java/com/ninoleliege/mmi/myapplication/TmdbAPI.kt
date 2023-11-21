@@ -4,6 +4,19 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface Api {
+
+    // liste des films
     @GET("trending/movie/week")
-    suspend fun lastmovies(@Query("432dbeb947fe645d6b008204074295c6") api_key: String): TmdbMovieResult
+    suspend fun lastmovies(@Query("api_key") api_key: String): TmdbMovieResult
+
+
+    // liste des series
+    @GET("trending/tv/week")
+    suspend fun lastseries(@Query("api_key") api_key: String): TmdbTvResult
+
+
+    // detail d'un film
+    @GET("movie/${id}?append_to_response=credits&")
+    suspend fun detailsfilm(@Query("api_key") api_key: String): TmdbDetailsFilm
+
 }

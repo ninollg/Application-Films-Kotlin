@@ -16,26 +16,25 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 
 @Composable
-fun ListeFilms(viewModel: MainViewModel){
-    LaunchedEffect(key1 = 0){viewModel.getMovies()}
-    val movies by viewModel.movies.collectAsStateWithLifecycle()
+fun ListeSeries(viewModel: MainViewModel){
+    LaunchedEffect(key1 = 0){viewModel.getSeries()}
+    val series by viewModel.series.collectAsStateWithLifecycle()
 
     LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp) ){
-        for (movie in movies){
+        for (serie in series){
             items(1) {
                 Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, ) {
 
-                val idimage = "https://image.tmdb.org/t/p/w780/" + movie.poster_path
-                AsyncImage(
-                    model = idimage,
-                    contentDescription = movie.original_title,
-
-                )
-                Text(text = movie.original_title)
-                Text(text = movie.release_date)
+                    val idimage = "https://image.tmdb.org/t/p/w780/" + serie.poster_path
+                    AsyncImage(
+                        model = idimage,
+                        contentDescription = serie.original_name,
+                    )
+                    Text(text = serie.original_name)
+                    Text(text = serie.first_air_date)
+                }
             }
         }
     }
-    }
-    
+
 }
