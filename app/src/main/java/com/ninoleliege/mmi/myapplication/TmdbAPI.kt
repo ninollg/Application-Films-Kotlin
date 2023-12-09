@@ -20,5 +20,12 @@ interface Api {
     @GET("movie/{id}?append_to_response=credits")
     suspend fun detailsfilm(@Path("id") id: String, @Query("api_key") api_key: String): TmdbDetailsFilm
 
+    // detail d'une serie
+    @GET("tv/{id}?append_to_response=credits")
+    suspend fun detailsserie(@Path("id") id: String, @Query("api_key") api_key: String): TmdbDetailsTv
 
+
+    // liste des acteurs
+    @GET("trending/person/week")
+    suspend fun lastacteurs(@Query("api_key") api_key: String): TmdbPersonResult
 }

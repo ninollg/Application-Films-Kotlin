@@ -1,5 +1,6 @@
 package com.ninoleliege.mmi.myapplication
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,14 +17,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 
 @Composable
-fun ListeSeries(viewModel: MainViewModel){
+fun ListeSeries(viewModel: MainViewModel, onClick:(id:String)->Unit){
     LaunchedEffect(key1 = 0){viewModel.getSeries()}
     val series by viewModel.series.collectAsStateWithLifecycle()
 
     LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp) ){
         for (serie in series){
             items(1) {
-                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, ) {
+                Column(modifier = Modifier.fillMaxSize().clickable{onClick(serie.id.toString())}, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, ) {
 
                     val idimage = "https://image.tmdb.org/t/p/w780/" + serie.poster_path
                     AsyncImage(

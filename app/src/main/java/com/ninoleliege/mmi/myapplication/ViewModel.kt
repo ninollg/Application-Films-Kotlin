@@ -43,6 +43,23 @@ class MainViewModel : ViewModel() {
             detailsfilm.value = api.detailsfilm(api_key = "432dbeb947fe645d6b008204074295c6", id=id)
         }
     }
+
+    val detailsserie = MutableStateFlow<TmdbDetailsTv?>(null)
+
+    fun getDetailsSerie(id:String) {
+        viewModelScope.launch {
+            detailsserie.value = api.detailsserie(api_key = "432dbeb947fe645d6b008204074295c6", id=id)
+        }
+    }
+
+    val acteurs = MutableStateFlow<List<TmdbPerson>>(listOf())
+
+    fun getActeurs() {
+        viewModelScope.launch {
+            acteurs.value = api.lastacteurs("432dbeb947fe645d6b008204074295c6").results
+        }
+    }
+
 }
 
 

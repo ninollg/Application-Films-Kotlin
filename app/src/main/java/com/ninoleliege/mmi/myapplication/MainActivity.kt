@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
 
-            val destinations = listOf(Destination.Profil, Destination.Films, Destination.Series)
+            val destinations = listOf(Destination.Profil, Destination.Films, Destination.Series, Destination.Acteurs)
             Scaffold(
                 bottomBar = {
                     if (currentDestination?.hierarchy?.any { it.route == Destination.Profil.destination } == false) {
@@ -116,14 +116,25 @@ class MainActivity : ComponentActivity() {
                     composable(Destination.Series.destination) {
                         Series(viewmodel = viewmodel) {
                             navController.navigate(
-                                "series"
+                                "DetailsSerie/${id}"
                             )
                         }
                     }
                     composable("DetailsFilm/{id}") { backStackEntry ->
                         val id = backStackEntry.arguments?.getString("id") ?: ""
                         DetailsFilm(viewmodel = viewmodel, id = id)
-                    }                    }
+                    }
+                    composable("DetailsSerie/{id}") { backStackEntry ->
+                        val id = backStackEntry.arguments?.getString("id") ?: ""
+                        DetailsSerie(viewmodel = viewmodel, id = id)
+                    }
+                    composable(Destination.Acteurs.destination) {
+                        Acteurs(viewmodel = viewmodel) {
+                            navController.navigate(
+                                "acteurs"
+                            )
+                        }
+                    }}
                 }
             }
         }
@@ -202,19 +213,6 @@ fun Films(viewmodel: MainViewModel, onClick: (id: String) -> Unit) {
         ListeFilms(viewModel = viewmodel, onClick)
     }
 }
-
-@Composable
-fun Series(viewmodel: MainViewModel, onClick: () -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Series")
-        ListeSeries(viewModel = viewmodel)
-    }
-}
-
 @Composable
 fun DetailsFilm(viewmodel: MainViewModel, id: String) {
     Column(
@@ -222,11 +220,46 @@ fun DetailsFilm(viewmodel: MainViewModel, id: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Detail d'un film")
-
         ListeDetailsFilm(id=id, viewModel = viewmodel )
     }
 }
+
+@Composable
+fun Series(viewmodel: MainViewModel, onClick: (id: String) -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("Series")
+        ListeSeries(viewModel = viewmodel, onClick)
+    }
+}
+
+@Composable
+fun DetailsSerie(viewmodel: MainViewModel, id: String){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        ListeDetailsSeries(id=id, viewModel = viewmodel )
+    }
+}
+
+
+@Composable
+fun Acteurs(viewmodel: MainViewModel, onClick: (id: String) -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("Acteurs")
+        ListeActeurs(viewModel = viewmodel, onClick)
+    }
+}
+
 
 
 @Composable
