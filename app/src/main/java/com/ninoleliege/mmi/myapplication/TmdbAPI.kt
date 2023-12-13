@@ -28,4 +28,8 @@ interface Api {
     // liste des acteurs
     @GET("trending/person/week")
     suspend fun lastacteurs(@Query("api_key") api_key: String): TmdbPersonResult
+
+    // Recherche de films par nom
+    @GET("search/movie")
+    suspend fun searchMovies(@Query("api_key") apiKey: String, @Query("query") query: String): TmdbMovieResult
 }

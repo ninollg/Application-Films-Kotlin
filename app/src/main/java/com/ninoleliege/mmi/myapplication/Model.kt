@@ -74,10 +74,7 @@ data class TmdbDetailsFilm(
     val video: Boolean,
     val vote_average: Double,
     val vote_count: Int
-) {
-
-}
-
+)
 
 // Details d'une série
 
